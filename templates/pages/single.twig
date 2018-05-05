@@ -1,0 +1,32 @@
+{# pages/single/post.twig #}
+
+{#
+   Single Post Page
+   @param {Post Object} post
+#}
+
+{# Parameters #}
+{% set postObj = post ?? null %}
+
+{# Variables #}
+{% set postBem = [{ block: 'post'}] %}
+
+{# Output #}
+{% extends ['templates-app/templates/app.twig', 'templates/app.twig'] %}
+
+   {% block app %}
+
+      {% import 'macros.twig' as mcro %}
+
+      {% include 'components/post--content-grid.twig' with { post: postObj, bem: [{ block: 'is-single' }] } %}
+
+      {% if postObj.is_single %}
+
+        <div class="block block--curvy block--green typography">
+          <h2>Related News</h2>
+          {% include 'components/post--content-related-posts.twig' with { posts: postObj.relatedPosts } %}
+        </div>
+
+      {% endif %}
+
+   {% endblock %}

@@ -1,0 +1,64 @@
+{# templates/app.twig #}
+
+{#
+   Single Post Page
+   @param {Post Object} post
+#}
+{# Parameters #}
+{% set appPost = post ?? null %}
+{% set appFooter = footer ?? null %}
+{% set appHeader = header ?? null %}
+{% set appTitle = appPost.title ?? appTitle ?? null %}
+{% set appSubtitle = appPost.subtitle ?? appSubtitle ?? null %}
+
+{# Variables #}
+{% set appAttrs = { post_type: appPost.post_type, post_id: appPost.ID, parent_id: function("wp_get_post_parent_id", appPost.id) } %}
+
+{# Output #}
+{% extends ['templates-app/templates/global.twig', 'templates/global.twig'] %}
+
+{% block main %}
+
+    {% import 'macros.twig' as mcro %}
+
+    {% if request_body.ajax != 1 %}
+       {# {% include 'components/overlay.twig' with { attrs: { id: 'overlayLoading' }, bem: [{block: 'overlay', modifier: ['splash'] } ] } %} #}
+       {# {% include 'components/loading-icon/loading-icon.twig' with { attrs: { id: 'loadingScreen' }, bem: [{ block: 'loading-screen', modifier: ['splash'] }] } %} #}
+       {# {% include 'components/overlay.twig' with { attrs: { id: 'overlayAjax' }, bem: [{block: 'overlay', modifier: ['ajax'] } ] } %} #}
+       {# {% include 'components/loading-icon/loading-icon.twig' with { attrs: { id: 'ajaxScreen' }, bem: [{ block: 'loading-screen', modifier: ['ajax'] }] } %} #}
+
+       {% include 'components/overlay.twig' with { attrs: { id: 'overlayMenu' }, bem: [{block: 'overlay', modifier: ['menu'] } ] } %}
+       {% include ['components/header.twig', 'components/header/header.twig' ] with { menu: appHeader.menu } %}
+    {% endif %}
+
+    {% set appInnerHTML %}
+
+       <div class="wrap wrap--break-xlg">
+          {% block app %}{% endblock %}
+       </div>
+
+       {% block after_app %}{% endblock %}
+
+    {% endset %}
+
+    {% if request_body.ajax == 1 %}
+
+       {{ appInnerHTML }}
+
+    {% else %}
+
+       {{ mcro.createHTMLTag('main', {
+          post_type: post.post_type,
+          page_id: post.ID,
+          parent_id: function("wp_get_post_parent_id", post.id )
+       }, [], appInnerHTML) }}
+
+    {% endif %}
+
+    {% if request_body.ajax != 1 %}
+
+       {% include ['components/footer.twig', 'components/footer.twig'] %}
+
+    {% endif %}
+
+{% endblock %}

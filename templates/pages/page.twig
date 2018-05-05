@@ -1,0 +1,34 @@
+{# pages/page/page.twig #}
+
+{#
+   Page
+   @param {Post Object} post
+#}
+
+{# Parameters #}
+
+
+{# Variables #}
+
+{# Output #}
+{% extends ['templates-app/templates/plain-page.twig', 'templates/plain-page.twig'] %}
+
+{% import 'macros.twig' as mcro %}
+
+   {% block page %}
+
+      <div class="wrap post">
+				<div class="block">
+					<div class="row">
+					 <div class="col-lg-8 col-lg-offset-2
+					 col-md-8 col-md-offset-2
+					 col-sm-12 col-xs-12">
+						 <div class="typography">
+							 {{ post.content }}
+						 </div>
+					 </div>
+					</div>
+				</div>
+      </div>
+
+   {% endblock %}
